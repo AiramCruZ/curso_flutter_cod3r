@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:projeto_perguntas/Questao.dart';
-import 'package:projeto_perguntas/Resposta.dart';
+import 'package:projeto_perguntas/Questionario.dart';
+import 'package:projeto_perguntas/Resultado.dart';
 
 void main() {
   runApp(const PerguntaApp());
@@ -8,34 +8,67 @@ void main() {
 
 class _PerguntaAppState extends State<PerguntaApp> {
   var _perguntaSelecionada = 0;
+  var _pontuacaoTotal = 0;
+  final _perguntas = [
+    {
+      'texto': 'Qual é a sua cor favorita?',
+      'respostas': [
+        {'texto': 'Preto', 'pontuacao': 10},
+        {'texto': 'Vermelho', 'pontuacao': 5},
+        {'texto': 'Verde', 'pontuacao': 3},
+        {'texto': 'Branco', 'pontuacao': 1},
+      ]
+    },
+    {
+      'texto': 'Qual é o seu animal favorito?',
+      'respostas': [
+        {'texto': 'Coelho', 'pontuacao': 2},
+        {'texto': 'Cobra', 'pontuacao': 4},
+        {'texto': 'Elefante', 'pontuacao': 8},
+        {'texto': 'Leão', 'pontuacao': 9},
+      ]
+    },
+    {
+      'texto': 'Qual é o seu instrutor favorito?',
+      'respostas': [
+        {'texto': 'Maria', 'pontuacao': 2},
+        {'texto': 'João', 'pontuacao': 8},
+        {'texto': 'Leo', 'pontuacao': 10},
+        {'texto': 'Pedro', 'pontuacao': 4},
+      ]
+    }
+  ];
+  bool get possuiPergunta => _perguntaSelecionada < _perguntas.length;
 
-  void _responder() {
+  void _responder(int pontuacao) {
+    if (possuiPergunta) {
+      setState(() {
+        _perguntaSelecionada++;
+        _pontuacaoTotal += pontuacao;
+      });
+    }
+  }
+
+  void _reiniciarQuestionario() {
     setState(() {
-      _perguntaSelecionada = _perguntaSelecionada == 1 ? 0 : 1;
+      _perguntaSelecionada = 0;
+      _pontuacaoTotal = 0;
     });
-    debugPrint('$_perguntaSelecionada');
   }
 
   @override
   Widget build(BuildContext context) {
-    final List<String> perguntas = [
-      'Qual é a sua cor favorita?',
-      'Qual é o seu animal favorito?',
-    ];
-
     return MaterialApp(
       home: Scaffold(
         appBar: AppBar(
           title: const Text('Perguntas'),
         ),
-        body: Column(
-          children: [
-            Questao(perguntas[_perguntaSelecionada]),
-            Resposta('Resposta 1', onPressed: _responder),
-            Resposta('Resposta 2', onPressed: _responder),
-            const Resposta('Resposta 3', onPressed: null),
-          ],
-        ),
+        body: possuiPergunta
+            ? Questionario(
+                indice: _perguntaSelecionada,
+                perguntas: _perguntas,
+                callBack: _responder)
+            : Resultado(_pontuacaoTotal, _reiniciarQuestionario),
       ),
     );
   }
