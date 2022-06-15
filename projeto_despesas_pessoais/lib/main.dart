@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:projeto_despesas_pessoais/model/Transaction.dart';
+import 'package:projeto_despesas_pessoais/components/transaction_list.dart';
+import 'package:projeto_despesas_pessoais/model/transaction.dart';
 import 'package:intl/intl.dart';
 
 void main() => runApp(const DespesasApp());
@@ -18,23 +19,25 @@ class DespesasApp extends StatelessWidget {
 class MyHomePage extends StatelessWidget {
   const MyHomePage({Key? key}) : super(key: key);
 
+  static final TextEditingController titleController = TextEditingController();
+  static final TextEditingController valueController = TextEditingController();
+  static final List<Transaction> _transactions = [
+    Transaction(
+      id: 't1',
+      title: 'Novo Tênis de Corrida',
+      value: 310.76,
+      date: DateTime.now(),
+    ),
+    Transaction(
+      id: 't2',
+      title: 'Conta de Luz',
+      value: 211.30,
+      date: DateTime.now(),
+    ),
+  ];
+
   @override
   Widget build(BuildContext context) {
-    final _transactions = [
-      Transaction(
-        id: 't1',
-        title: 'Novo Tênis de Corrida',
-        value: 310.76,
-        date: DateTime.now(),
-      ),
-      Transaction(
-        id: 't2',
-        title: 'Conta de Luz',
-        value: 211.30,
-        date: DateTime.now(),
-      ),
-    ];
-
     return Scaffold(
       appBar: AppBar(
         title: const Text("Despesas Pessoas"),
@@ -49,50 +52,45 @@ class MyHomePage extends StatelessWidget {
               child: Text("Grafico"),
             ),
           ),
-          Column(
-            children: _transactions.map((e) {
-              return Card(
-                child: Row(children: [
-                  Container(
-                    margin: const EdgeInsets.symmetric(
-                      horizontal: 15,
-                      vertical: 10,
-                    ),
-                    decoration: BoxDecoration(
-                      border: Border.all(color: Colors.purple, width: 2),
-                    ),
-                    padding: const EdgeInsets.all(10),
-                    child: Text(
-                      'R\$ ${e.value.toStringAsFixed(2)}',
-                      style: const TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 20,
-                        color: Colors.purple,
-                      ),
-                    ),
+          TransactionsList(transactions: _transactions),
+          Card(
+            elevation: 5,
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Column(
+                children: [
+                  TextField(
+                    controller: titleController,
+                    decoration: const InputDecoration(labelText: 'Titulo'),
                   ),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
+                  TextField(
+                    controller: valueController,
+                    decoration: const InputDecoration(labelText: 'Valor R\$'),
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
                     children: [
-                      Text(
-                        e.title,
-                        style: const TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.bold,
+                      ElevatedButton(
+                        onPressed: () {
+                          debugPrint('Precionou o botao');
+                          debugPrint(
+                              'titleController: ${titleController.text}');
+                          debugPrint(
+                              'valueController: ${valueController.text}');
+                        },
+                        style: ElevatedButton.styleFrom(
+                          primary: Colors.white,
+                          onPrimary: Colors.purple,
+                          elevation: 0,
                         ),
-                      ),
-                      Text(
-                        DateFormat('d MMM y').format(e.date),
-                        style: const TextStyle(
-                          color: Colors.grey,
-                        ),
+                        child: const Text('Nova Transação'),
                       ),
                     ],
-                  ),
-                ]),
-              );
-            }).toList(),
-          )
+                  )
+                ],
+              ),
+            ),
+          ),
         ],
       ),
     );
