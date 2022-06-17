@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:projeto_despesas_pessoais/model/Transaction.dart';
+import '../model/transaction.dart';
 
 class TransactionsList extends StatelessWidget {
   const TransactionsList({Key? key, required this.transactions})
