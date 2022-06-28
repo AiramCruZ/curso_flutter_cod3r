@@ -1,8 +1,9 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
-import 'package:projeto_despesas_pessoais/components/transaction_form.dart';
 
+import 'components/chart.dart';
+import 'components/transaction_form.dart';
 import 'components/transaction_list.dart';
 import 'model/transaction.dart';
 
@@ -51,19 +52,62 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   final List<Transaction> _transactions = [
-    // Transaction(
-    //   id: Random().nextDouble().toString(),
-    //   title: 'Conta #01',
-    //   value: 211.30,
-    //   date: DateTime.now(),
-    // ),
+    Transaction(
+      id: Random().nextDouble().toString(),
+      title: 'Conta #01',
+      value: 211.30,
+      date: DateTime.now().subtract(const Duration(days: 33)),
+    ),
     // Transaction(
     //   id: Random().nextDouble().toString(),
     //   title: 'Conta #02',
-    //   value: 211.30,
-    //   date: DateTime.now(),
+    //   value: 200,
+    //   date: DateTime.now().subtract(const Duration(days: 2)),
+    // ),
+    // Transaction(
+    //   id: Random().nextDouble().toString(),
+    //   title: 'Conta #03',
+    //   value: 300,
+    //   date: DateTime.now().subtract(const Duration(days: 3)),
+    // ),
+    // Transaction(
+    //   id: Random().nextDouble().toString(),
+    //   title: 'Conta #04',
+    //   value: 400,
+    //   date: DateTime.now().subtract(const Duration(days: 4)),
+    // ),
+    // Transaction(
+    //   id: Random().nextDouble().toString(),
+    //   title: 'Conta #05',
+    //   value: 500,
+    //   date: DateTime.now().subtract(const Duration(days: 5)),
+    // ),
+    // Transaction(
+    //   id: Random().nextDouble().toString(),
+    //   title: 'Conta #06',
+    //   value: 600,
+    //   date: DateTime.now().subtract(const Duration(days: 6)),
+    // ),
+    // Transaction(
+    //   id: Random().nextDouble().toString(),
+    //   title: 'Conta #07',
+    //   value: 700,
+    //   date: DateTime.now().subtract(const Duration(days: 7)),
+    // ),
+    // Transaction(
+    //   id: Random().nextDouble().toString(),
+    //   title: 'Conta #08',
+    //   value: 800,
+    //   date: DateTime.now().subtract(const Duration(days: 8)),
     // ),
   ];
+
+  List<Transaction> get _recentTransactions {
+    return _transactions
+        .where((element) =>
+            element.date.isAfter(DateTime.now().subtract(Duration(days: 7))))
+        .toList();
+  }
 
   _addTransactions(String title, double value) {
     final newTransaction = Transaction(
@@ -104,11 +148,9 @@ class _MyHomePageState extends State<MyHomePage> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            const SizedBox(
-              child: Card(
-                color: Colors.blue,
-                elevation: 5,
-                child: Text("Grafico"),
+            SizedBox(
+              child: Chart(
+                recentTransactions: _recentTransactions,
               ),
             ),
             TransactionsList(transactions: _transactions),
