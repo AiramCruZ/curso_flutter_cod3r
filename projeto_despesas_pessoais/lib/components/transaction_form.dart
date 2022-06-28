@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/src/foundation/key.dart';
-import 'package:flutter/src/widgets/framework.dart';
 
 class TransactionForm extends StatelessWidget {
-  const TransactionForm({Key? key}) : super(key: key);
+  const TransactionForm({Key? key, required this.onSubmit}) : super(key: key);
+
+  final Function(String, double) onSubmit;
 
   static final TextEditingController titleController = TextEditingController();
   static final TextEditingController valueController = TextEditingController();
@@ -29,9 +29,9 @@ class TransactionForm extends StatelessWidget {
               children: [
                 ElevatedButton(
                   onPressed: () {
-                    debugPrint('Precionou o botao');
-                    debugPrint('titleController: ${titleController.text}');
-                    debugPrint('valueController: ${valueController.text}');
+                    final title = titleController.text;
+                    final value = double.tryParse(valueController.text) ?? 0.0;
+                    onSubmit(title, value);
                   },
                   style: ElevatedButton.styleFrom(
                     primary: Colors.white,
