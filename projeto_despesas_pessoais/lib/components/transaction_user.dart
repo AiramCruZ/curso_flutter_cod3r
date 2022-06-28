@@ -16,14 +16,14 @@ class TransactionUser extends StatefulWidget {
 class _TransactionUserState extends State<TransactionUser> {
   final List<Transaction> _transactions = [
     Transaction(
-      id: 't1',
-      title: 'Novo Tênis de Corrida',
-      value: 310.76,
+      id: Random().nextDouble().toString(),
+      title: 'Conta #01',
+      value: 211.30,
       date: DateTime.now(),
     ),
     Transaction(
-      id: 't2',
-      title: 'Conta de Luz',
+      id: Random().nextDouble().toString(),
+      title: 'Conta #02',
       value: 211.30,
       date: DateTime.now(),
     ),
@@ -46,10 +46,10 @@ class _TransactionUserState extends State<TransactionUser> {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        TransactionsList(transactions: _transactions),
         TransactionForm(
           onSubmit: _addTransactions,
         ),
+        TransactionsList(transactions: _transactions),
       ],
     );
   }
