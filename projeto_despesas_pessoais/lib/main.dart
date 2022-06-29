@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 
 import 'components/chart.dart';
 import 'components/transaction_form.dart';
@@ -17,6 +18,12 @@ class DespesasApp extends StatelessWidget {
     final ThemeData theme = ThemeData();
 
     return MaterialApp(
+      localizationsDelegates: const [
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate,
+      ],
+      supportedLocales: const [Locale('pt', 'BR')],
       home: const MyHomePage(),
       theme: theme.copyWith(
         colorScheme: theme.colorScheme.copyWith(
@@ -51,70 +58,21 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  final List<Transaction> _transactions = [
-    Transaction(
-      id: Random().nextDouble().toString(),
-      title: 'Conta #01',
-      value: 211.30,
-      date: DateTime.now().subtract(const Duration(days: 33)),
-    ),
-    // Transaction(
-    //   id: Random().nextDouble().toString(),
-    //   title: 'Conta #02',
-    //   value: 200,
-    //   date: DateTime.now().subtract(const Duration(days: 2)),
-    // ),
-    // Transaction(
-    //   id: Random().nextDouble().toString(),
-    //   title: 'Conta #03',
-    //   value: 300,
-    //   date: DateTime.now().subtract(const Duration(days: 3)),
-    // ),
-    // Transaction(
-    //   id: Random().nextDouble().toString(),
-    //   title: 'Conta #04',
-    //   value: 400,
-    //   date: DateTime.now().subtract(const Duration(days: 4)),
-    // ),
-    // Transaction(
-    //   id: Random().nextDouble().toString(),
-    //   title: 'Conta #05',
-    //   value: 500,
-    //   date: DateTime.now().subtract(const Duration(days: 5)),
-    // ),
-    // Transaction(
-    //   id: Random().nextDouble().toString(),
-    //   title: 'Conta #06',
-    //   value: 600,
-    //   date: DateTime.now().subtract(const Duration(days: 6)),
-    // ),
-    // Transaction(
-    //   id: Random().nextDouble().toString(),
-    //   title: 'Conta #07',
-    //   value: 700,
-    //   date: DateTime.now().subtract(const Duration(days: 7)),
-    // ),
-    // Transaction(
-    //   id: Random().nextDouble().toString(),
-    //   title: 'Conta #08',
-    //   value: 800,
-    //   date: DateTime.now().subtract(const Duration(days: 8)),
-    // ),
-  ];
+  final List<Transaction> _transactions = [];
 
   List<Transaction> get _recentTransactions {
     return _transactions
-        .where((element) =>
-            element.date.isAfter(DateTime.now().subtract(Duration(days: 7))))
+        .where((element) => element.date
+            .isAfter(DateTime.now().subtract(const Duration(days: 7))))
         .toList();
   }
 
-  _addTransactions(String title, double value) {
+  _addTransaction(String title, double value, DateTime date) {
     final newTransaction = Transaction(
       id: Random().nextDouble().toString(),
       title: title,
       value: value,
-      date: DateTime.now(),
+      date: date,
     );
 
     setState(() {
@@ -123,11 +81,17 @@ class _MyHomePageState extends State<MyHomePage> {
     Navigator.of(context).pop();
   }
 
+  _deleteTransaction(String id) {
+    setState(() {
+      _transactions.removeWhere((element) => element.id == id);
+    });
+  }
+
   _openTransactionFormModal(BuildContext context) {
     showModalBottomSheet(
       context: context,
       builder: (_) {
-        return TransactionForm(onSubmit: _addTransactions);
+        return TransactionForm(onSubmit: _addTransaction);
       },
     );
   }
@@ -153,7 +117,10 @@ class _MyHomePageState extends State<MyHomePage> {
                 recentTransactions: _recentTransactions,
               ),
             ),
-            TransactionsList(transactions: _transactions),
+            TransactionsList(
+              transactions: _transactions,
+              onRemove: _deleteTransaction,
+            ),
           ],
         ),
       ),
