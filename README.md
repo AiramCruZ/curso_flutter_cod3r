@@ -1,16 +1,4 @@
-# projeto_despesas_pessoais
+# Projeto Despesas Pessoais
 
-A new Flutter project.
-
-## Getting Started
-
-This project is a starting point for a Flutter application.
-
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+Projeto desenvolvido no decorrer do curso [Aprenda Flutter & Dart e Construa APPs iOS e Android](https://docs.flutter.dev/get-started/codelab) da [Cod3r](https://docs.flutter.dev/get-started/codelab).
+Com o intuito de aprendizado do desenvolvimento de aplicações mobile utilizando o framework Flutter na sua versão 3.10.
